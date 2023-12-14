@@ -3,8 +3,12 @@ import { NavLink } from 'react-router-dom'
 const Aside = () => {
   return (
     <>
-      <NavLink to='/'>Создать карточку</NavLink>
-      <NavLink to='/delete'>Удалить карточку</NavLink>
+    <div className="aside">
+        <div className="aside__wrapper">
+          <NavLink className="aside__links" to='/'>Создать карточку</NavLink>
+          <NavLink className="aside__links" to='/delete'>Удалить карточку</NavLink>
+        </div>  
+    </div>
     </>
   )
 }
