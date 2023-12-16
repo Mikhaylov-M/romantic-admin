@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { axiosGet, url } from "./api/axios.request";
 import axios from "axios";
 
@@ -12,7 +12,7 @@ const Create = () => {
     product_code: ''
   })
 
-  const [cardId, setCardId] = useState('')
+  const cardId = useRef('')
 
   const [cardImages, setCardImages] = useState({
     mainImage: {},
@@ -46,7 +46,7 @@ const Create = () => {
     }
   }
 
-  const sendMainImage = async (id) => {
+  const sendMainImage = async () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
@@ -56,7 +56,7 @@ const Create = () => {
         "file" : cardImages.mainImage,
       }
       const { status } = 
-      await axios.post(`${url}/category/main-image/${id}`, formData, {
+      await axios.post(`${url}/category/main-image/${cardId.current}`, formData, {
         headers: headers
       })
       return status
@@ -65,7 +65,7 @@ const Create = () => {
     }
   }
 
-  const sendMainImages = async (id) => {
+  const sendMainImages = async () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
@@ -77,7 +77,7 @@ const Create = () => {
       }
 
       const { status } =
-      await axios.post(`${url}/category/main-images/${id}`, formData, {
+      await axios.post(`${url}/category/main-images/${cardId.current}`, formData, {
         headers: headers
       })
       return status
@@ -88,10 +88,10 @@ const Create = () => {
 
   const createCard = async () => {
     try {
-      const id = await sendInfo()
+      cardId.current = await sendInfo()
       try {
-        const status1 = await sendMainImage(id)
-        const status2 = await sendMainImages(id)
+        const status1 = await sendMainImage()
+        const status2 = await sendMainImages()
         if (status1 === 201 && status2 === 201) {
           alert('Карточка создана и картинки загружены')
         }
