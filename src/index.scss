@@ -123,15 +123,25 @@ body {
   grid-template-columns: repeat(3, 1fr);
   gap: 40px;
   padding: 50px;
+  overflow: auto;
+  @media(max-width: 1120px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
   &__card {
     width: 100%;
   }
   &__img {
     position: relative;
-    height: 350px;
+    height: 300px;
     border-radius: 24px;
     overflow: hidden;
     aspect-ratio: 1 / 1;
+    @media(max-width: 1410px) {
+      height: 270px;
+    }
+    @media(max-width: 850px) {
+      height: 250px;
+    }
     &:hover {
       .delete__btn {
         opacity: 1;
