@@ -132,16 +132,9 @@ body {
   }
   &__img {
     position: relative;
-    height: 300px;
     border-radius: 24px;
     overflow: hidden;
     aspect-ratio: 1 / 1;
-    @media(max-width: 1410px) {
-      height: 270px;
-    }
-    @media(max-width: 850px) {
-      height: 250px;
-    }
     &:hover {
       .delete__btn {
         opacity: 1;
