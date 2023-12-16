@@ -11,13 +11,16 @@ const Delete = () => {
 		setCategories(data)
 	}
 
-  const deleteCard = async (id) => {
-    try {
-      const data = await axiosGet(`/category/delete/${id}`)
-      alert('Успешно удалено')
-      getCategories()
-    } catch (error){
-      alert('Ошибка при удалении, попробуйте ещё раз')
+  const deleteCard = async (category) => {
+    let confirm = window.confirm(`Вы действительно хотите удалить ${category.name}?`)
+    if (confirm) {
+      try {
+        const data = await axiosGet(`/category/delete/${category.id}`)
+        alert('Успешно удалено')
+        getCategories()
+      } catch (error){
+        alert('Ошибка при удалении, попробуйте ещё раз')
+      }
     }
   }
 
@@ -36,7 +39,7 @@ const Delete = () => {
                 `${url}/file/${category.main_image.id}`
               } alt="" />
               <div className="delete__btn" 
-                onClick={() => deleteCard(category.id)}
+                onClick={() => deleteCard(category)}
               >Удалить</div>
             </div>
             <h2 className="delete__card-title">
