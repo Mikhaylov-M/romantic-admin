@@ -132,6 +132,19 @@ body {
     display: flex;
     flex-direction: column;
   }
+
+  &__btn {
+    left: 50%;
+    width: 40%;
+    margin-top: 50px;
+    position: relative;
+    padding: 20px 30px;
+    transform: translate(-50%);
+    border: none;
+    border-radius: 5px;
+    color: #FFF;
+    background-color: #3c3ca5;
+  }
 }
 
 .delete {

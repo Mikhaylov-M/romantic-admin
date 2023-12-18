@@ -36,7 +36,7 @@ const Delete = () => {
             <div className="delete__card">
             <div className="delete__img">
               <img src={
-                `${url}/file/${category.main_image.id}`
+                `${url}/file/${category?.main_image?.id}`
               } alt="" />
               <div className="delete__btn" 
                 onClick={() => deleteCard(category)}

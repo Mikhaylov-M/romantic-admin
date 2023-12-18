@@ -135,7 +135,6 @@ const Create = () => {
                 setCardInfo({...cardInfo, product_code: e.target.value})}
             />
           </form>
-
           <div className="create__block">
             <div className="create__inner">
               <form className="create__form main-image" action="">
@@ -164,10 +163,10 @@ const Create = () => {
                 <p className="create__title">Загрузить фото для 360</p>
                 <input className="create__inputs" type="file" />
               </form>
-               <button onClick={createCard}>Создать</button>
             </div>
           </div>
-        </div>
+          </div>
+        <button className="create__btn" onClick={createCard}>Создать</button>
       </div>
     </div>
   )
