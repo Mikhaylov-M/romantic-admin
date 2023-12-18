@@ -101,7 +101,7 @@ const Create = () => {
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке главной картинки: ${error.message}`)
+      alert(`Ошибка при загрузке первой 360 картинки: ${error.message}`)
     }
   }
 
@@ -120,7 +120,7 @@ const Create = () => {
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке главной картинки: ${error.message}`)
+      alert(`Ошибка при загрузке второй 360 картинки: ${error.message}`)
     }
   }
 

@@ -36,6 +36,8 @@ const Update = () => {
 
 	const [cardImages, setCardImages] = useState({
 		mainImage: {},
+    firsBottom: {},
+    secondBottom: {}
 	})
 
 	const sendInfo = async () => {
@@ -81,11 +83,54 @@ const Update = () => {
 		}
 	}
 
+  const sendFirstBottom = async () => {
+    try {
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      }
+
+      const formData = {
+        "file" : cardImages.firsBottom,
+      }
+      const { status } = 
+      await axios.post(`${url}/product/first-bottom-image/${id}`, formData, {
+        headers: headers
+      })
+      return status
+    } catch (error) {
+      alert(`Ошибка при загрузке первой 360 картинки: ${error.message}`)
+    }
+  }
+
+  const sendSecondBottom = async () => {
+    try {
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      }
+
+      const formData = {
+        "file" : cardImages.secondBottom,
+      }
+      const { status } = 
+      await axios.post(`${url}/product/second-bottom-image/${id}`, formData, {
+        headers: headers
+      })
+      return status
+    } catch (error) {
+      alert(`Ошибка при загрузке второй 360 картинки: ${error.message}`)
+    }
+  }
+
 	const updateCard = async () => {
 		try {
 			const statusInfo = await sendInfo()
       const statusImage = await sendMainImage()
-      if (statusInfo === 201 && statusImage === 201) {
+      const statusFirstBottom = await sendFirstBottom()
+      const statusSecondBottom = await sendSecondBottom()
+      if (statusInfo === 201 &&
+        statusImage === 201 &&
+        statusFirstBottom === 201 &&
+        statusSecondBottom === 201) {
         getCard()
         alert('Информация успешно обновлена')
       }
@@ -147,6 +192,18 @@ const Update = () => {
                 alt="main image"
               />
             </div>
+            <p className="create__title">Обновить фото для 360</p>
+                <input className="create__inputs" type="file"
+                onInput={e =>
+                  setCardImages({...cardImages,
+                    firsBottom: e.target.files[0]})}
+                />
+                <p className="create__title">Обновить фото для 360</p>
+                <input className="create__inputs" type="file"
+                onInput={e =>
+                  setCardImages({...cardImages,
+                    secondBottom: e.target.files[0]})}
+                />
           </form>
 				</div>
 				<button className="create__btn" onClick={updateCard}>Обновить</button>
