@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { axiosGet, url } from "./api/axios.request";
+import { Link } from "react-router-dom";
 
 const Delete = () => {
 
@@ -41,9 +42,8 @@ const Delete = () => {
               <div className="delete__btn" 
                 onClick={() => deleteCard(category)}
               >Удалить</div>
-              <a className="delete__btn-change" 
-                onClick={() => deleteCard(category)}
-              >Изменить</a>
+              <Link to={`/update/${category?.id}`} className="delete__btn-change" 
+              >Изменить</Link>
             </div>
             <h2 className="delete__card-title">
               {category.name}
