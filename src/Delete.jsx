@@ -41,6 +41,9 @@ const Delete = () => {
               <div className="delete__btn" 
                 onClick={() => deleteCard(category)}
               >Удалить</div>
+              <a className="delete__btn-change" 
+                onClick={() => deleteCard(category)}
+              >Изменить</a>
             </div>
             <h2 className="delete__card-title">
               {category.name}
