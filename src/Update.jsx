@@ -5,23 +5,30 @@ import { useParams } from 'react-router-dom'
 
 const Update = () => {
 
-	const { id } = useParams()
+  const { id } = useParams()
 
-	const [oldCard, setOldCard] = useState({})
-
-	useEffect(() => {
-		/* TODO: Axios запрос на получение товара со всеми его данными */
-
-		/* TODO: Axios запрос на получение товара со всеми его данными */
-	}, [])
-
-	const [cardInfo, setCardInfo] = useState({
+  const [cardInfo, setCardInfo] = useState({
 		name: '',
 		description: '',
 		color_description: '',
 		color: '',
 		product_code: ''
 	})
+
+  const getCard = async () => {
+    const data = await axiosGet(`/product/id/${id}`)
+    console.log(data)
+    // setCardInfo()
+  }
+
+	useEffect(() => {
+		/* TODO: Axios запрос на получение товара со всеми его данными */
+    getCard()
+
+		/* TODO: Axios запрос на получение товара со всеми его данными */
+	}, [])
+
+	
 
 	const cardId = useRef('')
 
@@ -122,10 +129,10 @@ const Update = () => {
 						<p className="create__title">Загрузить фото</p>
 						<input className="create__inputs" type="text"
 							placeholder="Название"
-							value={ oldCard?.name }
+							// value={ oldCard?.name }
 							onInput={e => {
 								/*  TODO: Добавить двустороннюю связь  */
-								setOldCard({ ...oldCard, name: e.target.value })
+								// setOldCard({ ...oldCard, name: e.target.value })
 								setCardInfo({ ...cardInfo, name: e.target.value })
 							}}
 						/>
@@ -172,7 +179,7 @@ const Update = () => {
 						</div>
 						<div className="create__inner">
 							<div>
-								<img src={`${url}/file/${oldCard?.mainImage?.id}`} alt="" />
+								{/* <img src={`${url}/file/${oldCard?.mainImage?.id}`} alt="" /> */}
 								<form className="create__form main-image" action="">
 									<p className="create__title">Загрузить фото для 360</p>
 									<input className="create__inputs" type="file" />
