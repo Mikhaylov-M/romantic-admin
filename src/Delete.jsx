@@ -6,7 +6,7 @@ const Delete = () => {
   const [categories, setCategories] = useState([])
   
 	const getCategories = async () => {
-		const data = await axiosGet("/category/all")
+		const data = await axiosGet("/product/all")
 		console.log(data)
 		setCategories(data)
 	}
@@ -15,7 +15,7 @@ const Delete = () => {
     let confirm = window.confirm(`Вы действительно хотите удалить ${category.name}?`)
     if (confirm) {
       try {
-        const data = await axiosGet(`/category/delete/${category.id}`)
+        const data = await axiosGet(`/product/delete/${category.id}`)
         alert('Успешно удалено')
         getCategories()
       } catch (error){

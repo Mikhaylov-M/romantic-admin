@@ -35,7 +35,7 @@ const Create = () => {
         "product_code" : cardInfo.product_code
       }
 
-      const { status, data } = await axios.post(`${url}/category/create`, body, {
+      const { status, data } = await axios.post(`${url}/product/create`, body, {
         headers: headers
       })
       if (status === 201) {
@@ -56,7 +56,7 @@ const Create = () => {
         "file" : cardImages.mainImage,
       }
       const { status } = 
-      await axios.post(`${url}/category/main-image/${cardId.current}`, formData, {
+      await axios.post(`${url}/product/main-image/${cardId.current}`, formData, {
         headers: headers
       })
       return status
@@ -77,7 +77,7 @@ const Create = () => {
       }
 
       const { status } =
-      await axios.post(`${url}/category/main-images/${cardId.current}`, formData, {
+      await axios.post(`${url}/product/main-images/${cardId.current}`, formData, {
         headers: headers
       })
       return status
