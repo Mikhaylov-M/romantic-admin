@@ -42,7 +42,7 @@ const Create = () => {
         return data.id
       }
     } catch (error) {
-      return error.message
+      alert(`Ошибка при отправке основных данных: ${error.message}`)
     }
   }
 
@@ -61,7 +61,7 @@ const Create = () => {
       })
       return status
     } catch (error) {
-      alert('Ошибка при загрузке картинки')
+      alert(`Ошибка при загрузке главной картинки: ${error.message}`)
     }
   }
 
@@ -82,21 +82,64 @@ const Create = () => {
       })
       return status
     } catch (error) {
-      alert('Ошибка при загрузке картинок')
+      alert(`Ошибка при загрузке маленьких картинок: ${error.message}`)
     }
+  }
+
+  const sendFirstBottom = async () => {
+    try {
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      }
+
+      const formData = {
+        "file" : cardImages.firsBottom,
+      }
+      const { status } = 
+      await axios.post(`${url}/product/first-bottom-image/${cardId.current}`, formData, {
+        headers: headers
+      })
+      return status
+    } catch (error) {
+      alert(`Ошибка при загрузке главной картинки: ${error.message}`)
     }
+  }
+
+  const sendSecondBottom = async () => {
+    try {
+      const headers = {
+        'Content-Type': 'multipart/form-data',
+      }
+
+      const formData = {
+        "file" : cardImages.secondBottom,
+      }
+      const { status } = 
+      await axios.post(`${url}/product/second-bottom-image/${cardId.current}`, formData, {
+        headers: headers
+      })
+      return status
+    } catch (error) {
+      alert(`Ошибка при загрузке главной картинки: ${error.message}`)
+    }
+  }
 
   const createCard = async () => {
     try {
       cardId.current = await sendInfo()
       try {
-        const status1 = await sendMainImage()
-        const status2 = await sendMainImages()
-        if (status1 === 201 && status2 === 201) {
+        const statusImage = await sendMainImage()
+        const statusImages = await sendMainImages()
+        const statusFirstBottom = await sendFirstBottom()
+        const statusSecondBottom = await sendSecondBottom()
+        if (statusImage === 201 && 
+          statusImages === 201 && 
+          statusFirstBottom === 201 && 
+          statusSecondBottom === 201) {
           alert('Карточка создана и картинки загружены')
         }
-      } catch {
-        alert('Ошибка при попытке загрузить картинку')
+      } catch (error) {
+        alert(`Ошибка при попытке загрузить картинки: ${error}`)
       }
     } catch (error) {
       alert(error)
@@ -147,7 +190,7 @@ const Create = () => {
               </form>
 
               <form className="create__form main-image" action="">
-                <p className="create__title">Загрузить фото для меленьких блоков</p>
+                <p className="create__title">Загрузить несколько фото для меленьких блоков</p>
                 <input className="create__inputs" type="file" multiple
                   onInput={e =>
                     setCardImages({...cardImages, mainImages: e.target.files})}
@@ -157,11 +200,19 @@ const Create = () => {
             <div className="create__inner">
               <form className="create__form main-image" action="">
                 <p className="create__title">Загрузить фото для 360</p>
-                <input className="create__inputs" type="file" />
+                <input className="create__inputs" type="file"
+                onInput={e =>
+                  setCardImages({...cardImages,
+                    firsBottom: e.target.files[0]})}
+                />
               </form>
               <form className="create__form main-image" action="">
                 <p className="create__title">Загрузить фото для 360</p>
-                <input className="create__inputs" type="file" />
+                <input className="create__inputs" type="file"
+                onInput={e =>
+                  setCardImages({...cardImages,
+                    secondBottom: e.target.files[0]})}
+                />
               </form>
             </div>
           </div>

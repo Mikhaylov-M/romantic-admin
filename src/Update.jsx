@@ -7,36 +7,35 @@ const Update = () => {
 
   const { id } = useParams()
 
-  const [cardInfo, setCardInfo] = useState({
-		name: '',
-		description: '',
-		color_description: '',
-		color: '',
-		product_code: ''
-	})
+  const [cardInfo, setCardInfo] = useState()
 
   const getCard = async () => {
-    const data = await axiosGet(`/product/id/${id}`)
-    console.log(data)
-    // setCardInfo()
+    const {
+      name,
+      description,
+      color_description,
+      color,
+      product_code,
+      main_image
+    } = await axiosGet(`/product/id/${id}`)
+    setCardInfo({
+      name: name,
+      description: description,
+      color_description: color_description,
+      color: color,
+      product_code: product_code,
+      main_image: main_image
+    })
   }
 
 	useEffect(() => {
 		/* TODO: Axios запрос на получение товара со всеми его данными */
     getCard()
-
 		/* TODO: Axios запрос на получение товара со всеми его данными */
 	}, [])
 
-	
-
-	const cardId = useRef('')
-
 	const [cardImages, setCardImages] = useState({
 		mainImage: {},
-		mainImages: {},
-		firsBottom: {},
-		secondBottom: {}
 	})
 
 	const sendInfo = async () => {
@@ -53,14 +52,13 @@ const Update = () => {
 				"product_code": cardInfo.product_code
 			}
 
-			const { status, data } = await axios.post(`${url}/product/create`, body, {
+			const { status } = await axios.post(`${url}/product/update/${id}`, body, {
 				headers: headers
 			})
-			if (status === 201) {
-				return data.id
-			}
+
+			return status
 		} catch (error) {
-			return error.message
+			alert(`Ошибка при обновлении основной информации: ${error.message}`)
 		}
 	}
 
@@ -74,48 +72,23 @@ const Update = () => {
 				"file": cardImages.mainImage,
 			}
 			const { status } =
-				await axios.post(`${url}/product/main-image/${cardId.current}`, formData, {
+				await axios.post(`${url}/product/main-image/${id}`, formData, {
 					headers: headers
 				})
 			return status
 		} catch (error) {
-			alert('Ошибка при загрузке картинки')
+			alert(`Ошибка при загрузке картинки: ${error.message}`)
 		}
 	}
 
-	const sendMainImages = async () => {
+	const updateCard = async () => {
 		try {
-			const headers = {
-				'Content-Type': 'multipart/form-data',
-			}
-
-			let formData = new FormData()
-			for (let i = 0; i < cardImages.mainImages.length; i++) {
-				formData.append('files', cardImages.mainImages[i])
-			}
-
-			const { status } =
-				await axios.post(`${url}/product/main-images/${cardId.current}`, formData, {
-					headers: headers
-				})
-			return status
-		} catch (error) {
-			alert('Ошибка при загрузке картинок')
-		}
-	}
-
-	const createCard = async () => {
-		try {
-			cardId.current = await sendInfo()
-			try {
-				const status1 = await sendMainImage()
-				const status2 = await sendMainImages()
-				if (status1 === 201 && status2 === 201) {
-					alert('Карточка создана и картинки загружены')
-				}
-			} catch {
-				alert('Ошибка при попытке загрузить картинку')
-			}
+			const statusInfo = await sendInfo()
+      const statusImage = await sendMainImage()
+      if (statusInfo === 201 && statusImage === 201) {
+        getCard()
+        alert('Информация успешно обновлена')
+      }
 		} catch (error) {
 			alert(error)
 		}
@@ -129,30 +102,33 @@ const Update = () => {
 						<p className="create__title">Загрузить фото</p>
 						<input className="create__inputs" type="text"
 							placeholder="Название"
-							// value={ oldCard?.name }
+							value={ cardInfo?.name }
 							onInput={e => {
 								/*  TODO: Добавить двустороннюю связь  */
-								// setOldCard({ ...oldCard, name: e.target.value })
 								setCardInfo({ ...cardInfo, name: e.target.value })
 							}}
 						/>
 						<textarea className="create__inputs create__inputs--textarea"
 							cols="30" rows="10" placeholder="Описание"
+              value={cardInfo?.description}
 							onInput={e =>
 								setCardInfo({ ...cardInfo, description: e.target.value })}
 						></textarea>
 						<input className="create__inputs" type="text"
 							placeholder="Название цвета"
+              value={ cardInfo?.color_description }
 							onInput={e =>
 								setCardInfo({ ...cardInfo, color_description: e.target.value })}
 						/>
 						<input className="create__inputs" type="text"
 							placeholder="Цвет #FFFFFF"
+              value={ cardInfo?.color }
 							onInput={e =>
 								setCardInfo({ ...cardInfo, color: e.target.value })}
 						/>
 						<input className="create__inputs" type="text"
 							placeholder="Код продукта"
+              value={ cardInfo?.product_code }
 							onInput={e =>
 								setCardInfo({ ...cardInfo, product_code: e.target.value })}
 						/>
@@ -166,11 +142,14 @@ const Update = () => {
                 })}
             />
             <div className="create__img-wrapper">
-              <img src="" alt="" />
+              <img
+                src={`${url}/file/${cardInfo?.main_image?.id}`}
+                alt="main image"
+              />
             </div>
           </form>
 				</div>
-				<button className="create__btn" onClick={createCard}>Создать</button>
+				<button className="create__btn" onClick={updateCard}>Обновить</button>
 			</div>
 		</div>
 	)

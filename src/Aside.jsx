@@ -10,7 +10,7 @@ const Aside = () => {
             <img src={logo} alt="" />
           </div>
           <NavLink className="aside__links" to='/'>Создать карточку</NavLink>
-          <NavLink className="aside__links" to='/delete'>Удалить карточку</NavLink>
+          <NavLink className="aside__links" to='/delete'>Удалить / Изменить</NavLink>
         </div>  
     </div>
     </>
