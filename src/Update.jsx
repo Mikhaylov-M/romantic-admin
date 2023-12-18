@@ -157,40 +157,18 @@ const Update = () => {
 								setCardInfo({ ...cardInfo, product_code: e.target.value })}
 						/>
 					</form>
-					<div className="create__block">
-						<div className="create__inner">
-							<form className="create__form main-image" action="">
-								<p className="create__title">Загрузить фото</p>
-								<input className="create__inputs" type="file"
-									onInput={e =>
-										setCardImages({
-											...cardImages, mainImage: e.target.files[0]
-										})}
-								/>
-							</form>
-
-							<form className="create__form main-image" action="">
-								<p className="create__title">Загрузить фото для меленьких блоков</p>
-								<input className="create__inputs" type="file" multiple
-									onInput={e =>
-										setCardImages({ ...cardImages, mainImages: e.target.files })}
-								/>
-							</form>
-						</div>
-						<div className="create__inner">
-							<div>
-								{/* <img src={`${url}/file/${oldCard?.mainImage?.id}`} alt="" /> */}
-								<form className="create__form main-image" action="">
-									<p className="create__title">Загрузить фото для 360</p>
-									<input className="create__inputs" type="file" />
-								</form>
-							</div>
-							<form className="create__form main-image" action="">
-								<p className="create__title">Загрузить фото для 360</p>
-								<input className="create__inputs" type="file" />
-							</form>
-						</div>
-					</div>
+          <form className="create__form main-image" action="">
+            <p className="create__title">Загрузить фото</p>
+            <input className="create__inputs" type="file"
+              onInput={e =>
+                setCardImages({
+                  ...cardImages, mainImage: e.target.files[0]
+                })}
+            />
+            <div className="create__img-wrapper">
+              <img src="" alt="" />
+            </div>
+          </form>
 				</div>
 				<button className="create__btn" onClick={createCard}>Создать</button>
 			</div>
