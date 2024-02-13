@@ -1,5 +1,5 @@
 import { useRef, useState } from "react";
-import { axiosGet, url } from "./api/axios.request";
+import { url } from "./api/axios.request";
 import axios from "axios";
 
 const Create = () => {
@@ -151,7 +151,7 @@ const Create = () => {
       <div className="create__container container">
         <div className="create__wrapper">
           <form className="create__form" action="">
-            <p className="create__title">Загрузить фото</p>
+            <p className="create__title">Описание</p>
             <input className="create__inputs" type="text"
               placeholder="Название"
               onInput={e =>
