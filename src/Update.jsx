@@ -3,7 +3,7 @@ import { axiosGet, url } from "./api/axios.request";
 import axios from "axios";
 import { useParams } from 'react-router-dom'
 
-const Update = () => {
+const Update = ({token}) => {
 
   const { id } = useParams()
 
@@ -17,7 +17,7 @@ const Update = () => {
       color,
       product_code,
       main_image
-    } = await axiosGet(`/product/id/${id}`)
+    } = await axiosGet(`/category/id/${id}`)
     setCardInfo({
       name: name,
       description: description,
@@ -44,6 +44,7 @@ const Update = () => {
 		try {
 			const headers = {
 				'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
 			}
 
 			const body = {
@@ -54,13 +55,13 @@ const Update = () => {
 				"product_code": cardInfo.product_code
 			}
 
-			const { status } = await axios.post(`${url}/product/update/${id}`, body, {
+			const { status } = await axios.post(`${url}/category/update/${id}`, body, {
 				headers: headers
 			})
-
+      console.log(status);
 			return status
 		} catch (error) {
-			alert(`Ошибка при обновлении основной информации: ${error.message}`)
+      return error?.response?.status
 		}
 	}
 
@@ -68,18 +69,19 @@ const Update = () => {
 		try {
 			const headers = {
 				'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
 			}
 
 			const formData = {
 				"file": cardImages.mainImage,
 			}
 			const { status } =
-				await axios.post(`${url}/product/main-image/${id}`, formData, {
+				await axios.post(`${url}/category/main-image/${id}`, formData, {
 					headers: headers
 				})
 			return status
 		} catch (error) {
-			alert(`Ошибка при загрузке картинки: ${error.message}`)
+      return error?.response?.status
 		}
 	}
 
@@ -87,18 +89,19 @@ const Update = () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
       }
 
       const formData = {
         "file" : cardImages.firsBottom,
       }
       const { status } = 
-      await axios.post(`${url}/product/first-bottom-image/${id}`, formData, {
+      await axios.post(`${url}/category/first-bottom-image/${id}`, formData, {
         headers: headers
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке первой 360 картинки: ${error.message}`)
+      return error?.response?.status
     }
   }
 
@@ -106,18 +109,19 @@ const Update = () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
       }
 
       const formData = {
         "file" : cardImages.secondBottom,
       }
       const { status } = 
-      await axios.post(`${url}/product/second-bottom-image/${id}`, formData, {
+      await axios.post(`${url}/category/second-bottom-image/${id}`, formData, {
         headers: headers
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке второй 360 картинки: ${error.message}`)
+      return error?.response?.status
     }
   }
 
@@ -133,6 +137,15 @@ const Update = () => {
         statusSecondBottom === 201) {
         getCard()
         alert('Информация успешно обновлена')
+      } else if (
+        statusInfo === 401 ||
+        statusImage === 401 ||
+        statusFirstBottom === 401 ||
+        statusSecondBottom === 401
+      ) {
+        localStorage.removeItem('token')
+        alert('Ошибка авторизации. Войдите снова')
+        window.location.reload()
       }
 		} catch (error) {
 			alert(error)

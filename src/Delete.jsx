@@ -1,13 +1,14 @@
 import { useEffect, useState } from "react";
 import { axiosGet, url } from "./api/axios.request";
 import { Link } from "react-router-dom";
+import axios from "axios";
 
-const Delete = () => {
+const Delete = ({token}) => {
 
   const [categories, setCategories] = useState([])
   
 	const getCategories = async () => {
-		const data = await axiosGet("/product/all")
+		const data = await axiosGet("/category/all")
 		console.log(data)
 		setCategories(data)
 	}
@@ -16,10 +17,20 @@ const Delete = () => {
     let confirm = window.confirm(`Вы действительно хотите удалить ${category.name}?`)
     if (confirm) {
       try {
-        const data = await axiosGet(`/product/delete/${category.id}`)
+        const headers = {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        }
+        console.log(headers);
+        console.log(category.id);
+        const data = await axios(`${url}/category/delete/${category.id}`, {headers: headers})
         alert('Успешно удалено')
         getCategories()
       } catch (error){
+        if (error?.response?.status === 401) {
+          localStorage.removeItem('token')
+          window.location.reload()
+        }
         alert('Ошибка при удалении, попробуйте ещё раз')
       }
     }
@@ -29,12 +40,11 @@ const Delete = () => {
 		getCategories()
 	}, [])
   return (
-
     <>
       <section className="delete">
       {
         categories.map(category => (
-            <div className="delete__card">
+            <div className="delete__card" key={category?.id}>
             <div className="delete__img">
               <img src={
                 `${url}/file/${category?.main_image?.id}`

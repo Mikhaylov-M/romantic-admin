@@ -2,7 +2,7 @@ import { useRef, useState } from "react";
 import { url } from "./api/axios.request";
 import axios from "axios";
 
-const Create = () => {
+const Create = ({token}) => {
 
   const [cardInfo, setCardInfo] = useState({
     name: '',
@@ -25,6 +25,7 @@ const Create = () => {
     try {
       const headers = {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
       }
 
       const body = {
@@ -35,7 +36,7 @@ const Create = () => {
         "product_code" : cardInfo.product_code
       }
 
-      const { status, data } = await axios.post(`${url}/product/create`, body, {
+      const { status, data } = await axios.post(`${url}/category/create`, body, {
         headers: headers
       })
       if (status === 201) {
@@ -43,6 +44,10 @@ const Create = () => {
       }
     } catch (error) {
       alert(`Ошибка при отправке основных данных: ${error.message}`)
+      if (error?.response?.status === 401) {
+        localStorage.removeItem('token')
+        window.location.reload()
+      }
     }
   }
 
@@ -50,18 +55,19 @@ const Create = () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
       }
 
       const formData = {
         "file" : cardImages.mainImage,
       }
       const { status } = 
-      await axios.post(`${url}/product/main-image/${cardId.current}`, formData, {
+      await axios.post(`${url}/category/main-image/${cardId.current}`, formData, {
         headers: headers
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке главной картинки: ${error.message}`)
+      return error?.response?.status
     }
   }
 
@@ -69,6 +75,7 @@ const Create = () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
       }
 
       let formData = new FormData()
@@ -77,12 +84,12 @@ const Create = () => {
       }
 
       const { status } =
-      await axios.post(`${url}/product/main-images/${cardId.current}`, formData, {
+      await axios.post(`${url}/category/main-images/${cardId.current}`, formData, {
         headers: headers
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке маленьких картинок: ${error.message}`)
+      return error?.response?.status
     }
   }
 
@@ -90,18 +97,19 @@ const Create = () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
       }
 
       const formData = {
         "file" : cardImages.firsBottom,
       }
       const { status } = 
-      await axios.post(`${url}/product/first-bottom-image/${cardId.current}`, formData, {
+      await axios.post(`${url}/category/first-bottom-image/${cardId.current}`, formData, {
         headers: headers
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке первой 360 картинки: ${error.message}`)
+      return error?.response?.status
     }
   }
 
@@ -109,18 +117,19 @@ const Create = () => {
     try {
       const headers = {
         'Content-Type': 'multipart/form-data',
+        'Authorization': `Bearer ${token}`
       }
 
       const formData = {
         "file" : cardImages.secondBottom,
       }
       const { status } = 
-      await axios.post(`${url}/product/second-bottom-image/${cardId.current}`, formData, {
+      await axios.post(`${url}/category/second-bottom-image/${cardId.current}`, formData, {
         headers: headers
       })
       return status
     } catch (error) {
-      alert(`Ошибка при загрузке второй 360 картинки: ${error.message}`)
+      return error?.response?.status
     }
   }
 
@@ -137,11 +146,24 @@ const Create = () => {
           statusFirstBottom === 201 && 
           statusSecondBottom === 201) {
           alert('Карточка создана и картинки загружены')
+        } else if (
+          statusImage === 401 ||
+          statusImages === 401 ||
+          statusFirstBottom === 401 ||
+          statusSecondBottom === 401
+        ) {
+          localStorage.removeItem('token')
+          alert('Ошибка авторизации. Войдите снова')
+          window.location.reload()
         }
       } catch (error) {
         alert(`Ошибка при попытке загрузить картинки: ${error}`)
       }
     } catch (error) {
+      if (error?.response?.status === 401) {
+        localStorage.removeItem('token')
+        window.location.reload()
+      }
       alert(error)
     }
   }
